@@ -31,54 +31,44 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        .top-navbar {
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border);
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
+        /* --- GLOBAL LOADER OVERLAY --- */
+        #global-loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(3px);
+            z-index: 99999;
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 50;
         }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 5px solid #e2e8f0;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .brand-logo {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--primary);
-            letter-spacing: -0.5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
+        /* --- HORIZONTAL SKELETON --- */
+        .top-navbar { background-color: var(--bg-card); border-bottom: 1px solid var(--border); padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; }
+        .brand-logo { font-size: 22px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
         .brand-logo span { color: var(--text-dark); }
-
         .user-controls { display: flex; align-items: center; gap: 20px; }
-
-        .btn-logout {
-            background: #fee2e2; color: var(--danger); border: none; padding: 8px 16px;
-            border-radius: 99px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;
-        }
+        .btn-logout { background: #fee2e2; color: var(--danger); border: none; padding: 8px 16px; border-radius: 99px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; }
         .btn-logout:hover { background: var(--danger); color: white; }
 
         .nav-menu-container { background-color: var(--bg-card); padding: 0 40px; border-bottom: 1px solid var(--border); box-shadow: var(--shadow-sm); }
         .nav-menu { display: flex; gap: 10px; max-width: 1200px; margin: 0 auto; overflow-x: auto; }
-        .nav-item {
-            padding: 16px 20px; color: var(--text-muted); font-weight: 600; font-size: 15px;
-            cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap;
-        }
+        .nav-item { padding: 16px 20px; color: var(--text-muted); font-weight: 600; font-size: 15px; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
         .nav-item:hover { color: var(--primary); }
         .nav-item.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
 
         .main-workspace { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-
         .segmented-control { display: inline-flex; background: #e2e8f0; padding: 4px; border-radius: 12px; margin-bottom: 30px; }
-        .segment-btn {
-            padding: 10px 24px; border: none; background: transparent; color: var(--text-muted);
-            font-weight: 600; font-size: 14px; border-radius: 8px; cursor: pointer; transition: all 0.2s;
-        }
+        .segment-btn { padding: 10px 24px; border: none; background: transparent; color: var(--text-muted); font-weight: 600; font-size: 14px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
         .segment-btn.active { background: var(--bg-card); color: var(--primary); box-shadow: var(--shadow-sm); }
 
         .tab-content { display: none; animation: slideUp 0.3s ease; }
@@ -87,8 +77,8 @@
         .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .page-title { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
 
-        .data-card { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden; border: 1px solid var(--border); width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
+        .data-card { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden; border: 1px solid var(--border); width: 100%; overflow-x: auto;}
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;}
         th { background: #f8fafc; padding: 16px 20px; font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
         td { padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 500; }
         tr:last-child td { border-bottom: none; }
@@ -96,16 +86,12 @@
 
         .form-card { background: var(--bg-card); padding: 40px; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); max-width: 800px; margin: 0 auto; border: 1px solid var(--border); }
         .form-card h3 { margin-top: 0; margin-bottom: 30px; font-size: 20px; color: var(--text-dark); }
-        
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .form-group { display: flex; flex-direction: column; }
         .form-group.full-width { grid-column: span 2; }
         
         label { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
-        input, select {
-            padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px;
-            font-family: inherit; background: #f8fafc; transition: all 0.2s; outline: none; width: 100%; box-sizing: border-box;
-        }
+        input, select { padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; background: #f8fafc; transition: all 0.2s; outline: none; width: 100%; box-sizing: border-box;}
         input:focus, select:focus { background: white; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
 
         .filter-bar { display: flex; gap: 15px; background: var(--bg-card); padding: 20px; border-radius: var(--radius-md); margin-bottom: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); align-items: flex-end; }
@@ -113,10 +99,8 @@
         .btn-primary { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer; transition: background 0.2s; font-family: inherit; }
         .btn-primary:hover { background: var(--primary-hover); }
         .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; opacity: 0.7; }
-        
         .btn-danger-outline { background: transparent; color: var(--danger); padding: 6px 12px; border: 1px solid var(--danger); border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer; transition: all 0.2s; }
         .btn-danger-outline:hover { background: var(--danger); color: white; }
-
         .btn-print-sm { background-color: #3b82f6; color: white; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 12px; font-weight: 600; transition: background 0.2s; display: inline-block; }
         .btn-print-sm:hover { background-color: #2563eb; }
 
@@ -141,7 +125,6 @@
         .login-card { background: white; padding: 50px 40px; border-radius: 24px; width: 100%; max-width: 400px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); text-align: center; }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -157,9 +140,6 @@
         .ticket-value { font-size: 16px; font-weight: 700; color: var(--text-dark); }
         .ticket-seat { font-size: 24px; font-weight: 800; color: var(--primary); background: #e0e7ff; padding: 6px 16px; border-radius: 6px; }
 
-        /* =========================================
-           PRINT MEDIA QUERY (Hides Navbar/Buttons)
-           ========================================= */
         @media print {
             body { background-color: white; }
             .top-navbar, .nav-menu-container { display: none !important; }
@@ -168,7 +148,6 @@
             .ticket-container { box-shadow: none !important; border: 2px solid #000 !important; margin: 0 !important; max-width: 100% !important; }
         }
 
-        /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .top-navbar { flex-direction: column; padding: 15px 20px; gap: 15px; }
             .user-controls { width: 100%; justify-content: space-between; }
@@ -189,17 +168,22 @@
 </head>
 <body>
 
+    <div id="global-loader">
+        <div class="spinner"></div>
+        <p style="margin-top: 20px; font-weight: 600; color: var(--primary); font-size: 16px; letter-spacing: 0.5px;">Browsing! Please be Patient...</p>
+    </div>
+
     <div id="login-screen">
         <div class="login-card">
             <div style="font-size: 32px; font-weight: 800; color: var(--primary); margin-bottom: 5px;">HM Travels</div>
             <p style="color: var(--text-muted); margin-bottom: 30px; font-size: 14px;">Enterprise Administrator Portal</p>
             <div style="text-align: left; margin-bottom: 20px;">
                 <label>Administrator Username</label>
-                <input type="text" id="login_user" placeholder="Enter username">
+                <input type="text" id="login_user" placeholder="Enter username" style="width: 100%; box-sizing: border-box;">
             </div>
             <div style="text-align: left; margin-bottom: 30px;">
                 <label>Secure Password</label>
-                <input type="password" id="login_pass" placeholder="••••••••">
+                <input type="password" id="login_pass" placeholder="••••••••" style="width: 100%; box-sizing: border-box;">
             </div>
             <button class="btn-primary" style="width: 100%;" onclick="login()">Authenticate Securely</button>
             <div id="login-error" style="color: var(--danger); margin-top: 15px; display: none; font-size: 14px; font-weight: 600;">Invalid Credentials provided!</div>
@@ -234,17 +218,24 @@
     </div>
 
     <script>
-        const BASE_URL = "http://10.196.201.58:8080/api";
+        // Because the HTML is now inside Spring Boot, we can use a relative path!
+        const BASE_URL = "https://haziqmaqsood05-haziq-maqsood.hf.space/api";
+
         const app = document.getElementById("app-container");
         let allCustomers = [];
-        let allBookings = []; // Global array to hold bookings for receipt generation
+        let allBookings = []; 
 
-        function checkAuth() {
+        // --- LOADER CONTROLS ---
+        function showLoader() { document.getElementById("global-loader").style.display = "flex"; }
+        function hideLoader() { document.getElementById("global-loader").style.display = "none"; }
+
+        // --- AUTHENTICATION & NAVIGATION CORE ---
+        async function checkAuth() {
             if (sessionStorage.getItem("travel_logged_in") === "true") {
                 document.getElementById("login-screen").style.display = "none";
                 document.getElementById("app-wrapper").style.display = "block";
+                await fetchCustomers();
                 showDashboard();
-                fetchCustomers();
             } else {
                 document.getElementById("login-screen").style.display = "flex";
                 document.getElementById("app-wrapper").style.display = "none";
@@ -262,7 +253,10 @@
         window.onload = checkAuth;
 
         async function fetchCustomers() {
-            try { allCustomers = await (await fetch(`${BASE_URL}/customers`)).json(); } catch(e) {}
+            showLoader();
+            try { allCustomers = await (await fetch(`${BASE_URL}/customers`)).json(); } 
+            catch(e) { console.error(e); } 
+            finally { hideLoader(); }
         }
 
         function activateNav(element) {
@@ -301,239 +295,273 @@
         }
 
         async function showRoutes() {
-            const data = await (await fetch(`${BASE_URL}/routes`)).json();
-            app.innerHTML = `
-                <div class="page-header"><h1 class="page-title">Network Routes</h1></div>
-                <div class="segmented-control">
-                    <button class="segment-btn active" onclick="switchLocalTab('dirTab', this)">Active Routes</button>
-                    <button class="segment-btn" onclick="switchLocalTab('addTab', this)">Establish New Route</button>
-                </div>
-                <div id="dirTab" class="tab-content active">
-                    <input type="text" id="routeSearch" class="search-box" style="background: white;" placeholder="Search routes by city...">
-                    <div class="data-card">
-                        <table>
-                            <thead><tr><th>ID Code</th><th>Route Designation</th><th>Origin City</th><th>Destination City</th><th>Standard Fare</th></tr></thead>
-                            <tbody id="routeTableBody">
-                                ${data.map(r => `<tr><td><span class="badge badge-info">RT-${r.id}</span></td><td><strong>${r.routeName}</strong></td><td>${r.departureCity}</td><td>${r.destinationCity}</td><td>Rs. ${r.baseFare}</td></tr>`).join('')}
-                            </tbody>
-                        </table>
+            showLoader();
+            try {
+                const data = await (await fetch(`${BASE_URL}/routes`)).json();
+                app.innerHTML = `
+                    <div class="page-header"><h1 class="page-title">Network Routes</h1></div>
+                    <div class="segmented-control">
+                        <button class="segment-btn active" onclick="switchLocalTab('dirTab', this)">Active Routes</button>
+                        <button class="segment-btn" onclick="switchLocalTab('addTab', this)">Establish New Route</button>
                     </div>
-                </div>
-                <div id="addTab" class="tab-content">
-                    <div class="form-card">
-                        <h3>Define New Travel Route</h3>
-                        <div class="form-grid">
-                            <div class="form-group full-width"><label>Route Designation Name</label><input type="text" id="r_name" placeholder="e.g. Silk Road Express"></div>
-                            <div class="form-group"><label>Origin / Departure City</label><input type="text" id="r_dep" placeholder="Enter city"></div>
-                            <div class="form-group"><label>Destination City</label><input type="text" id="r_dest" placeholder="Enter city"></div>
-                            <div class="form-group full-width"><label>Standard Base Fare (PKR)</label><input type="number" id="r_fare" placeholder="0.00"></div>
+                    <div id="dirTab" class="tab-content active">
+                        <input type="text" id="routeSearch" class="search-box" style="background: white;" placeholder="Search routes by city...">
+                        <div class="data-card">
+                            <table>
+                                <thead><tr><th>ID Code</th><th>Route Designation</th><th>Origin City</th><th>Destination City</th><th>Standard Fare</th></tr></thead>
+                                <tbody id="routeTableBody">
+                                    ${data.map(r => `<tr><td><span class="badge badge-info">RT-${r.id}</span></td><td><strong>${r.routeName}</strong></td><td>${r.departureCity}</td><td>${r.destinationCity}</td><td>Rs. ${r.baseFare}</td></tr>`).join('')}
+                                </tbody>
+                            </table>
                         </div>
-                        <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveRoute()">Establish Route</button>
                     </div>
-                </div>`;
-            attachLiveSearch('routeSearch', 'routeTableBody', [1, 2, 3]);
+                    <div id="addTab" class="tab-content">
+                        <div class="form-card">
+                            <h3>Define New Travel Route</h3>
+                            <div class="form-grid">
+                                <div class="form-group full-width"><label>Route Designation Name</label><input type="text" id="r_name" placeholder="e.g. Silk Road Express"></div>
+                                <div class="form-group"><label>Origin / Departure City</label><input type="text" id="r_dep" placeholder="Enter city"></div>
+                                <div class="form-group"><label>Destination City</label><input type="text" id="r_dest" placeholder="Enter city"></div>
+                                <div class="form-group full-width"><label>Standard Base Fare (PKR)</label><input type="number" id="r_fare" placeholder="0.00"></div>
+                            </div>
+                            <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveRoute()">Establish Route</button>
+                        </div>
+                    </div>`;
+                attachLiveSearch('routeSearch', 'routeTableBody', [1, 2, 3]);
+            } catch(e) { alert("Network Error: Could not fetch data."); }
+            finally { hideLoader(); }
         }
 
         async function saveRoute() {
-            const route = { routeName: document.getElementById("r_name").value, departureCity: document.getElementById("r_dep").value, destinationCity: document.getElementById("r_dest").value, baseFare: parseFloat(document.getElementById("r_fare").value) };
-            const res = await fetch(`${BASE_URL}/routes/add`, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(route) });
-            if(res.ok) { alert("Route successfully established!"); showRoutes(); } else { alert("Failed to save route data."); }
+            showLoader();
+            try {
+                const route = { routeName: document.getElementById("r_name").value, departureCity: document.getElementById("r_dep").value, destinationCity: document.getElementById("r_dest").value, baseFare: parseFloat(document.getElementById("r_fare").value) };
+                const res = await fetch(`${BASE_URL}/routes/add`, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(route) });
+                if(res.ok) { alert("Route successfully established!"); showRoutes(); } else { alert("Failed to save route data."); }
+            } catch(e) { alert("Network Error"); }
+            finally { hideLoader(); } // showRoutes() will trigger it again, which is fine
         }
 
         async function showVehicles() {
-            const data = await (await fetch(`${BASE_URL}/vehicles`)).json();
-            app.innerHTML = `
-                <div class="page-header"><h1 class="page-title">Fleet Assets</h1></div>
-                <div class="segmented-control">
-                    <button class="segment-btn active" onclick="switchLocalTab('fleetTab', this)">Asset Inventory</button>
-                    <button class="segment-btn" onclick="switchLocalTab('addTab', this)">Induct New Vehicle</button>
-                </div>
-                <div id="fleetTab" class="tab-content active">
-                    <input type="text" id="vehicleSearch" class="search-box" style="background: white;" placeholder="Search by model or registration...">
-                    <div class="data-card">
-                        <table>
-                            <thead><tr><th>ID</th><th>Vehicle Model</th><th>Registration No.</th><th>Class/Type</th><th>Max Capacity</th></tr></thead>
-                            <tbody id="vehicleTableBody">
-                                ${data.map(v => `<tr><td><span class="badge badge-warning">VA-${v.id}</span></td><td><strong>${v.vehicleName}</strong></td><td>${v.vehicleNo}</td><td><span class="badge badge-info">${v.vehicleType}</span></td><td>${v.capacity} Passengers</td></tr>`).join('')}
-                            </tbody>
-                        </table>
+            showLoader();
+            try {
+                const data = await (await fetch(`${BASE_URL}/vehicles`)).json();
+                app.innerHTML = `
+                    <div class="page-header"><h1 class="page-title">Fleet Assets</h1></div>
+                    <div class="segmented-control">
+                        <button class="segment-btn active" onclick="switchLocalTab('fleetTab', this)">Asset Inventory</button>
+                        <button class="segment-btn" onclick="switchLocalTab('addTab', this)">Induct New Vehicle</button>
                     </div>
-                </div>
-                <div id="addTab" class="tab-content">
-                    <div class="form-card">
-                        <h3>Vehicle Induction Form</h3>
-                        <div class="form-grid">
-                            <div class="form-group"><label>Vehicle Model / Name</label><input type="text" id="v_name" placeholder="e.g. Yutong Master"></div>
-                            <div class="form-group"><label>License / Registration No.</label><input type="text" id="v_no" placeholder="e.g. LHR-2023"></div>
-                            <div class="form-group"><label>Vehicle Class</label><select id="v_type"><option value="BUS">Luxury Bus</option><option value="CAR">Executive Car</option><option value="AEROPLANE">Aeroplane</option></select></div>
-                            <div class="form-group"><label>Passenger Capacity</label><input type="number" id="v_cap" placeholder="Total seats"></div>
+                    <div id="fleetTab" class="tab-content active">
+                        <input type="text" id="vehicleSearch" class="search-box" style="background: white;" placeholder="Search by model or registration...">
+                        <div class="data-card">
+                            <table>
+                                <thead><tr><th>ID</th><th>Vehicle Model</th><th>Registration No.</th><th>Class/Type</th><th>Max Capacity</th></tr></thead>
+                                <tbody id="vehicleTableBody">
+                                    ${data.map(v => `<tr><td><span class="badge badge-warning">VA-${v.id}</span></td><td><strong>${v.vehicleName}</strong></td><td>${v.vehicleNo}</td><td><span class="badge badge-info">${v.vehicleType}</span></td><td>${v.capacity} Passengers</td></tr>`).join('')}
+                                </tbody>
+                            </table>
                         </div>
-                        <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveVehicle()">Add to Fleet Registry</button>
                     </div>
-                </div>`;
-            attachLiveSearch('vehicleSearch', 'vehicleTableBody', [1, 2]);
+                    <div id="addTab" class="tab-content">
+                        <div class="form-card">
+                            <h3>Vehicle Induction Form</h3>
+                            <div class="form-grid">
+                                <div class="form-group"><label>Vehicle Model / Name</label><input type="text" id="v_name" placeholder="e.g. Yutong Master"></div>
+                                <div class="form-group"><label>License / Registration No.</label><input type="text" id="v_no" placeholder="e.g. LHR-2023"></div>
+                                <div class="form-group"><label>Vehicle Class</label><select id="v_type"><option value="BUS">Luxury Bus</option><option value="CAR">Executive Car</option><option value="AEROPLANE">Aeroplane</option></select></div>
+                                <div class="form-group"><label>Passenger Capacity</label><input type="number" id="v_cap" placeholder="Total seats"></div>
+                            </div>
+                            <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveVehicle()">Add to Fleet Registry</button>
+                        </div>
+                    </div>`;
+                attachLiveSearch('vehicleSearch', 'vehicleTableBody', [1, 2]);
+            } catch(e) { alert("Network Error: Could not fetch data."); }
+            finally { hideLoader(); }
         }
 
         async function saveVehicle() {
-            const vehicle = { vehicleName: document.getElementById("v_name").value, vehicleNo: document.getElementById("v_no").value, vehicleType: document.getElementById("v_type").value, capacity: parseInt(document.getElementById("v_cap").value) };
-            const res = await fetch(`${BASE_URL}/vehicles/add`, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(vehicle) });
-            if(res.ok) { alert("Asset inducted successfully!"); showVehicles(); } else { alert("Error: Check Registration No."); }
+            showLoader();
+            try {
+                const vehicle = { vehicleName: document.getElementById("v_name").value, vehicleNo: document.getElementById("v_no").value, vehicleType: document.getElementById("v_type").value, capacity: parseInt(document.getElementById("v_cap").value) };
+                const res = await fetch(`${BASE_URL}/vehicles/add`, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(vehicle) });
+                if(res.ok) { alert("Asset inducted successfully!"); showVehicles(); } else { alert("Error: Check Registration No."); }
+            } catch(e) { alert("Network Error"); }
+            finally { hideLoader(); }
         }
 
         async function showTrips() {
-            const trips = await (await fetch(`${BASE_URL}/trips`)).json();
-            const routes = await (await fetch(`${BASE_URL}/routes`)).json();
-            const vehicles = await (await fetch(`${BASE_URL}/vehicles`)).json();
-            app.innerHTML = `
-                <div class="page-header"><h1 class="page-title">Trip Dispatch Center</h1></div>
-                <div class="segmented-control">
-                    <button class="segment-btn active" onclick="switchLocalTab('tripTab', this)">Master Schedule</button>
-                    <button class="segment-btn" onclick="switchLocalTab('addTab', this)">Dispatch New Trip</button>
-                </div>
-                <div id="tripTab" class="tab-content active">
-                    <input type="text" id="tripSearch" class="search-box" style="background: white;" placeholder="Search schedule...">
-                    <div class="data-card">
-                        <table>
-                            <thead><tr><th>Dispatch ID</th><th>Assigned Route</th><th>Allocated Asset</th><th>Departure Schedule</th><th>Assigned Captain</th></tr></thead>
-                            <tbody id="tripTableBody">
-                                ${trips.map(t => `<tr><td><span class="badge badge-success">DSP-${t.id}</span></td><td><strong>${t.route.routeName}</strong><br><span style="font-size:12px;color:var(--text-muted);">${t.route.departureCity} ➝ ${t.route.destinationCity}</span></td><td>${t.vehicle.vehicleName}</td><td>${new Date(t.departureTime).toLocaleString('en-GB', { day: '2-digit', month: 'short', year:'numeric', hour: '2-digit', minute: '2-digit' })}</td><td>${t.driverName}</td></tr>`).join('')}
-                            </tbody>
-                        </table>
+            showLoader();
+            try {
+                const trips = await (await fetch(`${BASE_URL}/trips`)).json();
+                const routes = await (await fetch(`${BASE_URL}/routes`)).json();
+                const vehicles = await (await fetch(`${BASE_URL}/vehicles`)).json();
+                app.innerHTML = `
+                    <div class="page-header"><h1 class="page-title">Trip Dispatch Center</h1></div>
+                    <div class="segmented-control">
+                        <button class="segment-btn active" onclick="switchLocalTab('tripTab', this)">Master Schedule</button>
+                        <button class="segment-btn" onclick="switchLocalTab('addTab', this)">Dispatch New Trip</button>
                     </div>
-                </div>
-                <div id="addTab" class="tab-content">
-                    <div class="form-card">
-                        <h3>Schedule & Dispatch</h3>
-                        <div class="form-grid">
-                            <div class="form-group full-width"><label>Assign Network Route</label><select id="t_route"><option value="" disabled selected>-- Select Route --</option>${routes.map(r => `<option value="${r.id}">${r.routeName} (${r.departureCity} to ${r.destinationCity})</option>`).join('')}</select></div>
-                            <div class="form-group full-width"><label>Allocate Fleet Asset</label><select id="t_veh"><option value="" disabled selected>-- Select Asset --</option>${vehicles.map(v => `<option value="${v.id}">${v.vehicleName} [${v.vehicleNo}] - ${v.capacity} Seats</option>`).join('')}</select></div>
-                            <div class="form-group"><label>Departure Date & Time</label><input type="datetime-local" id="departureInput"></div>
-                            <div class="form-group"><label>Captain / Driver Name</label><input type="text" id="t_driver" placeholder="e.g. Muhammad Ali"></div>
+                    <div id="tripTab" class="tab-content active">
+                        <input type="text" id="tripSearch" class="search-box" style="background: white;" placeholder="Search schedule...">
+                        <div class="data-card">
+                            <table>
+                                <thead><tr><th>Dispatch ID</th><th>Assigned Route</th><th>Allocated Asset</th><th>Departure Schedule</th><th>Assigned Captain</th></tr></thead>
+                                <tbody id="tripTableBody">
+                                    ${trips.map(t => `<tr><td><span class="badge badge-success">DSP-${t.id}</span></td><td><strong>${t.route.routeName}</strong><br><span style="font-size:12px;color:var(--text-muted);">${t.route.departureCity} ➝ ${t.route.destinationCity}</span></td><td>${t.vehicle.vehicleName}</td><td>${new Date(t.departureTime).toLocaleString('en-GB', { day: '2-digit', month: 'short', year:'numeric', hour: '2-digit', minute: '2-digit' })}</td><td>${t.driverName}</td></tr>`).join('')}
+                                </tbody>
+                            </table>
                         </div>
-                        <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveTrip()">Confirm Dispatch</button>
                     </div>
-                </div>`;
-            attachLiveSearch('tripSearch', 'tripTableBody', [1, 2, 4]);
+                    <div id="addTab" class="tab-content">
+                        <div class="form-card">
+                            <h3>Schedule & Dispatch</h3>
+                            <div class="form-grid">
+                                <div class="form-group full-width"><label>Assign Network Route</label><select id="t_route"><option value="" disabled selected>-- Select Route --</option>${routes.map(r => `<option value="${r.id}">${r.routeName} (${r.departureCity} to ${r.destinationCity})</option>`).join('')}</select></div>
+                                <div class="form-group full-width"><label>Allocate Fleet Asset</label><select id="t_veh"><option value="" disabled selected>-- Select Asset --</option>${vehicles.map(v => `<option value="${v.id}">${v.vehicleName} [${v.vehicleNo}] - ${v.capacity} Seats</option>`).join('')}</select></div>
+                                <div class="form-group"><label>Departure Date & Time</label><input type="datetime-local" id="departureInput"></div>
+                                <div class="form-group"><label>Captain / Driver Name</label><input type="text" id="t_driver" placeholder="e.g. Muhammad Ali"></div>
+                            </div>
+                            <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveTrip()">Confirm Dispatch</button>
+                        </div>
+                    </div>`;
+                attachLiveSearch('tripSearch', 'tripTableBody', [1, 2, 4]);
+            } catch(e) { alert("Network Error: Could not fetch data."); }
+            finally { hideLoader(); }
         }
 
         async function saveTrip() {
-            const trip = { routeId: parseInt(document.getElementById("t_route").value), vehicleId: parseInt(document.getElementById("t_veh").value), departureTime: document.getElementById("departureInput").value + ":00", driverName: document.getElementById("t_driver").value };
-            const res = await fetch(`${BASE_URL}/trips/schedule`, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(trip) });
-            if(res.ok) { alert("Dispatch Confirmed!"); showTrips(); } else { alert("Error scheduling dispatch."); }
+            showLoader();
+            try {
+                const trip = { routeId: parseInt(document.getElementById("t_route").value), vehicleId: parseInt(document.getElementById("t_veh").value), departureTime: document.getElementById("departureInput").value + ":00", driverName: document.getElementById("t_driver").value };
+                const res = await fetch(`${BASE_URL}/trips/schedule`, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(trip) });
+                if(res.ok) { alert("Dispatch Confirmed!"); showTrips(); } else { alert("Error scheduling dispatch."); }
+            } catch(e) { alert("Network Error"); }
+            finally { hideLoader(); }
         }
 
         async function showCustomers() {
-            await fetchCustomers();
-            app.innerHTML = `
-                <div class="page-header"><h1 class="page-title">Passenger Directory</h1></div>
-                <div class="segmented-control">
-                    <button class="segment-btn active" onclick="switchLocalTab('dirTab', this)">Directory View</button>
-                    <button class="segment-btn" onclick="switchLocalTab('regTab', this)">Onboard Passenger</button>
-                </div>
-                <div id="dirTab" class="tab-content active">
-                    <input type="text" id="customerSearch" class="search-box" style="background: white;" placeholder="Search by name, CNIC, or phone...">
-                    <div class="data-card">
-                        <table>
-                            <thead><tr><th>Full Name</th><th>CNIC (ID)</th><th>Contact Number</th><th>Email Address</th></tr></thead>
-                            <tbody id="customerTableBody">
-                                ${allCustomers.map(c => `<tr><td><strong>${c.firstName} ${c.lastName}</strong></td><td><span style="font-family:monospace;">${c.cnic}</span></td><td>${c.phone}</td><td>${c.email || '<span style="color:#cbd5e1;">N/A</span>'}</td></tr>`).join('')}
-                            </tbody>
-                        </table>
+            showLoader();
+            try {
+                await fetchCustomers(); // Updates the global array
+                app.innerHTML = `
+                    <div class="page-header"><h1 class="page-title">Passenger Directory</h1></div>
+                    <div class="segmented-control">
+                        <button class="segment-btn active" onclick="switchLocalTab('dirTab', this)">Directory View</button>
+                        <button class="segment-btn" onclick="switchLocalTab('regTab', this)">Onboard Passenger</button>
                     </div>
-                </div>
-                <div id="regTab" class="tab-content">
-                    <div class="form-card">
-                        <h3>Passenger Onboarding Profile</h3>
-                        <div class="form-grid">
-                            <div class="form-group"><label>First Name</label><input type="text" id="c_fname"></div>
-                            <div class="form-group"><label>Last Name</label><input type="text" id="c_lname"></div>
-                            <div class="form-group full-width"><label>National Identity (CNIC) - 13 Digits</label><input type="text" id="c_cnic" maxlength="13" placeholder="No dashes"></div>
-                            <div class="form-group"><label>Phone / Mobile</label><input type="text" id="c_phone"></div>
-                            <div class="form-group"><label>Email (Optional)</label><input type="email" id="c_email"></div>
-                            <div class="form-group full-width"><label>Account Password</label><input type="password" id="c_pass"></div>
+                    <div id="dirTab" class="tab-content active">
+                        <input type="text" id="customerSearch" class="search-box" style="background: white;" placeholder="Search by name, CNIC, or phone...">
+                        <div class="data-card">
+                            <table>
+                                <thead><tr><th>Full Name</th><th>CNIC (ID)</th><th>Contact Number</th><th>Email Address</th></tr></thead>
+                                <tbody id="customerTableBody">
+                                    ${allCustomers.map(c => `<tr><td><strong>${c.firstName} ${c.lastName}</strong></td><td><span style="font-family:monospace;">${c.cnic}</span></td><td>${c.phone}</td><td>${c.email || '<span style="color:#cbd5e1;">N/A</span>'}</td></tr>`).join('')}
+                                </tbody>
+                            </table>
                         </div>
-                        <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveCustomer()">Create Profile</button>
                     </div>
-                </div>`;
-            attachLiveSearch('customerSearch', 'customerTableBody', [0, 1]);
+                    <div id="regTab" class="tab-content">
+                        <div class="form-card">
+                            <h3>Passenger Onboarding Profile</h3>
+                            <div class="form-grid">
+                                <div class="form-group"><label>First Name</label><input type="text" id="c_fname"></div>
+                                <div class="form-group"><label>Last Name</label><input type="text" id="c_lname"></div>
+                                <div class="form-group full-width"><label>National Identity (CNIC) - 13 Digits</label><input type="text" id="c_cnic" maxlength="13" placeholder="No dashes"></div>
+                                <div class="form-group"><label>Phone / Mobile</label><input type="text" id="c_phone"></div>
+                                <div class="form-group"><label>Email (Optional)</label><input type="email" id="c_email"></div>
+                                <div class="form-group full-width"><label>Account Password</label><input type="password" id="c_pass"></div>
+                            </div>
+                            <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveCustomer()">Create Profile</button>
+                        </div>
+                    </div>`;
+                attachLiveSearch('customerSearch', 'customerTableBody', [0, 1]);
+            } catch(e) { alert("Network Error: Could not fetch data."); }
+            finally { hideLoader(); }
         }
 
         async function saveCustomer() {
-            const customer = { firstName: document.getElementById("c_fname").value, lastName: document.getElementById("c_lname").value, cnic: document.getElementById("c_cnic").value, phone: document.getElementById("c_phone").value, email: document.getElementById("c_email").value, password: document.getElementById("c_pass").value };
-            const res = await fetch(`${BASE_URL}/customers/register`, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(customer) });
-            if(res.ok) { alert("Passenger Onboarded!"); showCustomers(); } else { alert("Failed. Email or CNIC may already exist in the system."); }
+            showLoader();
+            try {
+                const customer = { firstName: document.getElementById("c_fname").value, lastName: document.getElementById("c_lname").value, cnic: document.getElementById("c_cnic").value, phone: document.getElementById("c_phone").value, email: document.getElementById("c_email").value, password: document.getElementById("c_pass").value };
+                const res = await fetch(`${BASE_URL}/customers/register`, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(customer) });
+                if(res.ok) { alert("Passenger Onboarded!"); showCustomers(); } else { alert("Failed. Email or CNIC may already exist."); }
+            } catch(e) { alert("Network Error"); }
+            finally { hideLoader(); }
         }
 
         // --- TICKETING & SPA RECEIPT ---
         let selectedSeatNumber = null; 
 
         async function showBookings() {
-            try { allBookings = await (await fetch(`${BASE_URL}/reservations`)).json(); } catch(e) {}
-
-            app.innerHTML = `
-                <div class="page-header no-print">
-                    <h1 class="page-title">Ticketing & Ledger</h1>
-                </div>
-                <div class="segmented-control no-print">
-                    <button class="segment-btn active" onclick="showBookings()">Master Ledger</button>
-                    <button class="segment-btn" onclick="showBookingForm()">Issue Walk-In Ticket</button>
-                </div>
-                
-                <div class="filter-bar no-print">
-                    <div class="form-group" style="flex:1;">
-                        <label>Filter Departure</label>
-                        <input type="text" id="filter_dep" placeholder="City...">
+            showLoader();
+            try { 
+                allBookings = await (await fetch(`${BASE_URL}/reservations`)).json(); 
+                app.innerHTML = `
+                    <div class="page-header no-print">
+                        <h1 class="page-title">Ticketing & Ledger</h1>
                     </div>
-                    <div class="form-group" style="flex:1;">
-                        <label>Filter Destination</label>
-                        <input type="text" id="filter_dest" placeholder="City...">
+                    <div class="segmented-control no-print">
+                        <button class="segment-btn active" onclick="showBookings()">Master Ledger</button>
+                        <button class="segment-btn" onclick="showBookingForm()">Issue Walk-In Ticket</button>
                     </div>
-                    <div class="form-group" style="flex:1;">
-                        <label>Travel Date</label>
-                        <input type="date" id="filter_date">
+                    
+                    <div class="filter-bar no-print">
+                        <div class="form-group" style="flex:1;">
+                            <label>Filter Departure</label>
+                            <input type="text" id="filter_dep" placeholder="City...">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Filter Destination</label>
+                            <input type="text" id="filter_dest" placeholder="City...">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Travel Date</label>
+                            <input type="date" id="filter_date">
+                        </div>
+                        <button class="btn-primary" onclick="applyLedgerFilters()">Apply Filters</button>
                     </div>
-                    <button class="btn-primary" onclick="applyLedgerFilters()">Apply Filters</button>
-                </div>
 
-                <div class="data-card no-print">
-                    <table>
-                        <thead>
-                            <tr><th>Ticket Ref</th><th>Passenger</th><th>Itinerary</th><th>Departure Date</th><th>Seat Assigned</th><th>Status</th><th>Management</th></tr>
-                        </thead>
-                        <tbody id="ledgerTableBody">
-                            ${allBookings.map(b => {
-                                const todayStr = new Date().toISOString().split('T')[0];
-                                const tripDateStr = b.trip.departureTime.split('T')[0];
-                                
-                                const actionHtml = (tripDateStr >= todayStr) 
-                                    ? `<button class="btn-danger-outline" onclick="cancelReservation(${b.id})">Void Ticket</button>`
-                                    : `<span style="color: var(--text-muted); font-size: 12px; font-weight: 600;">Past Record</span>`;
+                    <div class="data-card no-print">
+                        <table>
+                            <thead>
+                                <tr><th>Ticket Ref</th><th>Passenger</th><th>Itinerary</th><th>Departure Date</th><th>Seat Assigned</th><th>Status</th><th>Management</th></tr>
+                            </thead>
+                            <tbody id="ledgerTableBody">
+                                ${allBookings.map(b => {
+                                    const todayStr = new Date().toISOString().split('T')[0];
+                                    const tripDateStr = b.trip.departureTime.split('T')[0];
+                                    
+                                    const actionHtml = (tripDateStr >= todayStr) 
+                                        ? `<button class="btn-danger-outline" onclick="cancelReservation(${b.id})">Void Ticket</button>`
+                                        : `<span style="color: var(--text-muted); font-size: 12px; font-weight: 600;">Past Record</span>`;
 
-                                // THE SPA PRINT BUTTON
-                                const printHtml = `<button class="btn-print-sm" onclick="showReceipt(${b.id})">Print</button>`;
+                                    const printHtml = `<button class="btn-print-sm" onclick="showReceipt(${b.id})">Print</button>`;
 
-                                return `
-                                <tr class="ledger-row" data-dep="${b.trip.route.departureCity.toLowerCase()}" data-dest="${b.trip.route.destinationCity.toLowerCase()}" data-date="${tripDateStr}">
-                                    <td><span style="font-family:monospace; font-weight:700;">TK-${b.id}</span></td>
-                                    <td><strong>${b.customer.firstName} ${b.customer.lastName}</strong><br><span style="font-size:12px;color:var(--text-muted);">${b.customer.cnic}</span></td>
-                                    <td>${b.trip.route.departureCity} ➝ ${b.trip.route.destinationCity}</td>
-                                    <td>${new Date(b.trip.departureTime).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year:'numeric'})}</td>
-                                    <td><span class="badge badge-info">Seat ${b.seatNo}</span></td>
-                                    <td><span class="badge ${b.bookingStatus === 'CONFIRMED' ? 'badge-success' : 'badge-warning'}">${b.bookingStatus}</span></td>
-                                    <td>
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            ${printHtml}
-                                            ${actionHtml}
-                                        </div>
-                                    </td>
-                                </tr>`;
-                            }).join('')}
-                        </tbody>
-                    </table>
-                </div>`;
+                                    return `
+                                    <tr class="ledger-row" data-dep="${b.trip.route.departureCity.toLowerCase()}" data-dest="${b.trip.route.destinationCity.toLowerCase()}" data-date="${tripDateStr}">
+                                        <td><span style="font-family:monospace; font-weight:700;">TK-${b.id}</span></td>
+                                        <td><strong>${b.customer.firstName} ${b.customer.lastName}</strong><br><span style="font-size:12px;color:var(--text-muted);">${b.customer.cnic}</span></td>
+                                        <td>${b.trip.route.departureCity} ➝ ${b.trip.route.destinationCity}</td>
+                                        <td>${new Date(b.trip.departureTime).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year:'numeric'})}</td>
+                                        <td><span class="badge badge-info">Seat ${b.seatNo}</span></td>
+                                        <td><span class="badge ${b.bookingStatus === 'CONFIRMED' ? 'badge-success' : 'badge-warning'}">${b.bookingStatus}</span></td>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                ${printHtml}
+                                                ${actionHtml}
+                                            </div>
+                                        </td>
+                                    </tr>`;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>`;
+            } 
+            catch(e) { alert("Network Error: Could not fetch ledger data."); }
+            finally { hideLoader(); }
         }
 
-        // The Custom SPA Receipt Page
         function showReceipt(bookingId) {
             const booking = allBookings.find(b => b.id === bookingId);
             if (!booking) { alert("Ticket not found."); return; }
@@ -553,15 +581,11 @@
                         <p><strong>Ticket Ref #:</strong> <span class="ticket-value">TK-${booking.id}</span></p>
                         <p><strong>Passenger Name:</strong> <span class="ticket-value">${booking.customer.firstName} ${booking.customer.lastName}</span></p>
                         <p><strong>Identity (CNIC):</strong> <span class="ticket-value" style="font-family:monospace;">${booking.customer.cnic}</span></p>
-                        
                         <hr style="border: 0; border-top: 1px dashed var(--border); margin: 25px 0;">
-                        
                         <p><strong>Travel Route:</strong> <span class="ticket-value">${booking.trip.route.departureCity} ➝ ${booking.trip.route.destinationCity}</span></p>
                         <p><strong>Departure Schedule:</strong> <span class="ticket-value">${new Date(booking.trip.departureTime).toLocaleString('en-GB', { day: '2-digit', month: 'short', year:'numeric', hour: '2-digit', minute: '2-digit' })}</span></p>
                         <p><strong>Fleet Asset:</strong> <span class="ticket-value">${booking.trip.vehicle.vehicleName} (${booking.trip.vehicle.vehicleType})</span></p>
-                        
                         <hr style="border: 0; border-top: 1px dashed var(--border); margin: 25px 0;">
-                        
                         <p><strong>Seat Allocation:</strong> <span class="ticket-seat">${booking.seatNo}</span></p>
                         <p><strong>Total Fare Collected:</strong> <span class="ticket-value" style="color: var(--success); font-size: 20px;">Rs. ${booking.totalFare}</span></p>
                     </div>
@@ -592,55 +616,61 @@
 
         async function cancelReservation(reservationId) {
             if (!confirm("Confirm ticket voiding? This action is irreversible and frees the seat.")) return; 
+            showLoader();
             try {
                 const res = await fetch(`${BASE_URL}/reservations/cancel/${reservationId}`, { method: 'DELETE' });
                 if (res.ok) { alert("Ticket voided successfully."); showBookings(); } 
                 else { alert("System Error: Could not process cancellation."); }
             } catch (error) { alert("Network connection failed."); }
+            finally { hideLoader(); }
         }
 
         async function showBookingForm() {
-            const trips = await (await fetch(`${BASE_URL}/trips`)).json();
-            app.innerHTML = `
-                <div class=""><h1 class="page-title">Ticketing & Ledger</h1></div>
-                <div class="segmented-control no-print">
-                    <button class="segment-btn" onclick="showBookings()">Master Ledger</button>
-                    <button class="segment-btn active" onclick="showBookingForm()">Issue Walk-In Ticket</button>
-                </div>
-                <div class="form-cardpage-header no-print no-print" style="max-width: 900px;">
-                    <h3>Issue New Passenger Ticket</h3>
-                    <div class="form-grid">
-                        <div class="form-group full-width">
-                            <label>1. Authenticate Passenger Identity (CNIC)</label>
-                            <input type="text" id="b_cnic" required pattern="[0-9]{13}" placeholder="Enter 13-digit CNIC">
-                        </div>
+            showLoader();
+            try {
+                const trips = await (await fetch(`${BASE_URL}/trips`)).json();
+                app.innerHTML = `
+                    <div class="page-header no-print"><h1 class="page-title">Ticketing & Ledger</h1></div>
+                    <div class="segmented-control no-print">
+                        <button class="segment-btn" onclick="showBookings()">Master Ledger</button>
+                        <button class="segment-btn active" onclick="showBookingForm()">Issue Walk-In Ticket</button>
                     </div>
-                    <div class="seat-map-wrapper" style="margin-top: 20px;">
-                        <label style="color: var(--text-dark); font-size: 15px;">2. Search & Select Dispatch Schedule</label>
-                        <div class="filter-bar" style="background: white; margin-top: 10px; padding:15px; box-shadow:none;">
-                            <input type="text" id="routeDep" placeholder="Origin..." style="flex:1" onkeyup="filterTrips()">
-                            <input type="text" id="routeDest" placeholder="Destination..." style="flex:1" onkeyup="filterTrips()">
-                            <input type="date" id="routeDate" style="flex:1" onchange="filterTrips()">
-                        </div>
-                        <select id="b_trip" style="width: 100%; margin-bottom: 25px;" required onchange="loadSeatMap(this)">
-                            <option value="" disabled selected>-- Select an Available Trip --</option>
-                            ${trips.map(t => `
-                                <option value="${t.id}" data-dep="${t.route.departureCity.toLowerCase()}" data-dest="${t.route.destinationCity.toLowerCase()}" data-date="${t.departureTime.split('T')[0]}" data-capacity="${t.vehicle.capacity}">
-                                    ${t.route.departureCity} ➝ ${t.route.destinationCity} | ${new Date(t.departureTime).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })} | ${t.vehicle.vehicleType}
-                                </option>
-                            `).join('')}
-                        </select>
-                        <label style="color: var(--text-dark); font-size: 15px; margin-bottom: 15px;">3. Interactive Seat Allocation</label>
-                        <div id="seat-container" class="seat-grid">
-                            <div style="grid-column: span 4; text-align: center; padding: 40px 0; color: var(--text-muted); border: 2px dashed var(--border); border-radius: 8px;">
-                                Awaiting trip selection to map fleet seating...
+                    <div class="form-card no-print" style="max-width: 900px;">
+                        <h3>Issue New Passenger Ticket</h3>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label>1. Authenticate Passenger Identity (CNIC)</label>
+                                <input type="text" id="b_cnic" required pattern="[0-9]{13}" placeholder="Enter 13-digit CNIC">
                             </div>
                         </div>
-                    </div>
-                    <div style="margin-top: 30px; text-align: right;">
-                        <button class="btn-primary" id="btn-confirm" onclick="saveBooking()" disabled style="padding: 16px 40px; font-size: 16px; width: 100%;">Select a Seat to Issue Ticket</button>
-                    </div>
-                </div>`;
+                        <div class="seat-map-wrapper" style="margin-top: 20px;">
+                            <label style="color: var(--text-dark); font-size: 15px;">2. Search & Select Dispatch Schedule</label>
+                            <div class="filter-bar" style="background: white; margin-top: 10px; padding:15px; box-shadow:none;">
+                                <input type="text" id="routeDep" placeholder="Origin..." style="flex:1" onkeyup="filterTrips()">
+                                <input type="text" id="routeDest" placeholder="Destination..." style="flex:1" onkeyup="filterTrips()">
+                                <input type="date" id="routeDate" style="flex:1" onchange="filterTrips()">
+                            </div>
+                            <select id="b_trip" style="width: 100%; margin-bottom: 25px;" required onchange="loadSeatMap(this)">
+                                <option value="" disabled selected>-- Select an Available Trip --</option>
+                                ${trips.map(t => `
+                                    <option value="${t.id}" data-dep="${t.route.departureCity.toLowerCase()}" data-dest="${t.route.destinationCity.toLowerCase()}" data-date="${t.departureTime.split('T')[0]}" data-capacity="${t.vehicle.capacity}">
+                                        ${t.route.departureCity} ➝ ${t.route.destinationCity} | ${new Date(t.departureTime).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })} | ${t.vehicle.vehicleType}
+                                    </option>
+                                `).join('')}
+                            </select>
+                            <label style="color: var(--text-dark); font-size: 15px; margin-bottom: 15px;">3. Interactive Seat Allocation</label>
+                            <div id="seat-container" class="seat-grid">
+                                <div style="grid-column: span 4; text-align: center; padding: 40px 0; color: var(--text-muted); border: 2px dashed var(--border); border-radius: 8px;">
+                                    Awaiting trip selection to map fleet seating...
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 30px; text-align: right;">
+                            <button class="btn-primary" id="btn-confirm" onclick="saveBooking()" disabled style="padding: 16px 40px; font-size: 16px; width: 100%;">Select a Seat to Issue Ticket</button>
+                        </div>
+                    </div>`;
+            } catch(e) { alert("Network Error: Could not load schedules."); }
+            finally { hideLoader(); }
         }
         
         function filterTrips() {
@@ -679,6 +709,7 @@
             btnConfirm.innerText = "Select a Seat to Issue Ticket";
             seatContainer.innerHTML = "<div style='grid-column: span 4; text-align:center; padding: 20px;'>Syncing seat map with server...</div>";
 
+            showLoader();
             try {
                 const reservations = await (await fetch(`${BASE_URL}/reservations/trip/${tripId}`)).json();
                 const bookedSeats = reservations.map(res => res.seatNo);
@@ -700,7 +731,7 @@
                 }
             } catch (error) {
                 seatContainer.innerHTML = "<div style='color:var(--danger); grid-column: span 4; text-align:center;'>Telemetry link failed. Check server status.</div>";
-            }
+            } finally { hideLoader(); }
         }
 
         function selectSeat(seatNo) {
@@ -726,19 +757,22 @@
                 alert("Identity Unverified: Passenger CNIC not found in directory. Please onboard passenger first."); return;
             }
 
-            const booking = { customerId: customer.id, tripId: parseInt(tripId), seatNo: selectedSeatNumber };
-            const res = await fetch(`${BASE_URL}/reservations/book`, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(booking) });
+            showLoader();
+            try {
+                const booking = { customerId: customer.id, tripId: parseInt(tripId), seatNo: selectedSeatNumber };
+                const res = await fetch(`${BASE_URL}/reservations/book`, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(booking) });
 
-            if(res.ok) { 
-                const savedTicket = await res.json(); 
-                alert("Ticket successfully allocated & issued."); 
-                // Re-fetch bookings array to include the new one, then instantly load the receipt!
-                try { allBookings = await (await fetch(`${BASE_URL}/reservations`)).json(); } catch(e) {}
-                showReceipt(savedTicket.id);
-            } else { 
-                alert("Conflict: Seat allocation failed (likely acquired by another agent). Reloading map..."); 
-                loadSeatMap(document.getElementById("b_trip"));
-            }
+                if(res.ok) { 
+                    const savedTicket = await res.json(); 
+                    alert("Ticket successfully allocated & issued."); 
+                    try { allBookings = await (await fetch(`${BASE_URL}/reservations`)).json(); } catch(e) {}
+                    showReceipt(savedTicket.id);
+                } else { 
+                    alert("Conflict: Seat allocation failed (likely acquired by another agent). Reloading map..."); 
+                    loadSeatMap(document.getElementById("b_trip"));
+                }
+            } catch(e) { alert("Network Error: Could not process booking."); }
+            finally { hideLoader(); }
         }
     </script>
 </body>
