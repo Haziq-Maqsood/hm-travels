@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Print Ticket | HM Travels</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #ecf0f1; padding: 40px; display: flex; justify-content: center; }
+
+        /* The Ticket Card */
+        .ticket-container { background: white; padding: 30px 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; border: 2px dashed #34495e; position: relative; }
+
+        /* Header */
+        .ticket-header { text-align: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 15px; margin-bottom: 20px; }
+        .ticket-header h2 { margin: 0; color: #2c3e50; font-size: 28px; letter-spacing: 2px; }
+        .ticket-header p { margin: 5px 0 0; color: #7f8c8d; text-transform: uppercase; font-size: 12px; font-weight: bold; }
+
+        /* Body Data */
+        .ticket-body p { margin: 12px 0; font-size: 16px; color: #2c3e50; display: flex; justify-content: space-between; align-items: center; }
+        .ticket-body strong { color: #7f8c8d; font-size: 14px; text-transform: uppercase; }
+        .highlight-text { font-size: 18px; font-weight: bold; color: #2c3e50; }
+        .seat-text { font-size: 24px; font-weight: bold; color: #e74c3c; background: #fadbd8; padding: 4px 12px; border-radius: 4px; }
+        .fare-text { font-size: 20px; font-weight: bold; color: #2ecc71; }
+
+        /* Buttons */
+        .btn-group { display: flex; justify-content: space-between; margin-top: 40px; }
+        .btn { padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; text-decoration: none; text-align: center; transition: 0.2s; }
+        .btn-print { background-color: #3498db; color: white; }
+        .btn-print:hover { background-color: #2980b9; }
+        .btn-back { background-color: #95a5a6; color: white; }
+        .btn-back:hover { background-color: #7f8c8d; }
+
+        /* THE PRINT MAGIC: This hides the background and buttons when printing to paper/PDF */
+        @media print {
+            body { background-color: white; padding: 0; }
+            .ticket-container { box-shadow: none; border: 2px solid #000; margin: 0 auto; }
+            .btn-group { display: none; } /* Hides buttons on paper */
+        }
+    </style>
+</head>
+<body>
+
+<div class="ticket-container">
+    <div class="ticket-header">
+        <h2>HM TRAVELS</h2>
+        <p>Official Boarding Pass & Receipt</p>
+    </div>
+
+    <div class="ticket-body">
+        <p><strong>Ref #:</strong> <span class="highlight-text" th:text="'HMT-' + ${booking.id}"></span></p>
+        <p><strong>Passenger:</strong> <span class="highlight-text" th:text="${booking.customer.firstName} + ' ' + ${booking.customer.lastName}"></span></p>
+        <p><strong>CNIC:</strong> <span th:text="${booking.customer.cnic}"></span></p>
+
+        <hr style="border: 0; border-top: 1px dashed #bdc3c7; margin: 20px 0;">
+
+        <p><strong>Route:</strong> <span class="highlight-text" th:text="${booking.trip.route.departureCity} + ' ➝ ' + ${booking.trip.route.destinationCity}"></span></p>
+        <p><strong>Departure:</strong> <span th:text="${#temporals.format(booking.trip.departureTime, 'dd-MMM-yyyy hh:mm a')}"></span></p>
+        <p><strong>Vehicle:</strong> <span th:text="${booking.trip.vehicle.vehicleName}"></span></p>
+
+        <hr style="border: 0; border-top: 1px dashed #bdc3c7; margin: 20px 0;">
+
+        <p><strong>Seat No:</strong> <span class="seat-text" th:text="${booking.seatNo}"></span></p>
+        <p><strong>Total Fare:</strong> <span class="fare-text" th:text="'Rs. ' + ${booking.totalFare}"></span></p>
+    </div>
+
+    <div class="btn-group">
+        <a href="/bookings" class="btn btn-back">← Back</a>
+        <button onclick="window.print()" class="btn btn-print">🖨️ Print Ticket</button>
+    </div>
+</div>
+
+</body>
+</html>

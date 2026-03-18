@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}">Manage Customers</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; height: 100vh; background-color: #ecf0f1; }
+        .sidebar { width: 250px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; }
+        .sidebar h2 { text-align: center; padding: 20px 0; margin: 0; border-bottom: 1px solid #34495e; }
+        .sidebar a { color: white; padding: 15px 20px; text-decoration: none; border-bottom: 1px solid #34495e; transition: 0.3s; }
+        .sidebar a:hover { background-color: #34495e; }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-bottom: 20px; }
+
+        /* Table & Search Styles */
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #16a085; color: white; }
+        .search-box { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
+
+        /* Form Styles */
+        .form-container { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 60%; margin: 0 auto; }
+        .form-container input, .form-container select { width: 100%; padding: 10px; margin: 8px 0 15px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .input-row { display: flex; gap: 15px; }
+        .input-row div { flex: 1; }
+        .btn-submit { background-color: #2ecc71; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; }
+
+        /* TAB Styles */
+        .tab-header { display: flex; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab-btn { padding: 10px 20px; cursor: pointer; background: none; border: none; font-size: 16px; font-weight: bold; color: #7f8c8d; outline: none; }
+        .tab-btn.active { color: #16a085; border-bottom: 3px solid #16a085; margin-bottom: -2px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .alert-success { background-color: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; border-radius: 4px; }
+        .alert-error { background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 15px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>HM Travels</h2>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/routes">Manage Routes</a>
+    <a href="/vehicles">Manage Vehicles</a>
+    <a href="/trips">Schedule Trips</a>
+    <a href="/bookings">View Bookings</a>
+    <a href="/customers">Manage Customers</a>
+</div>
+<div class="main-content">
+    <div class="header"><h1>Customer Management</h1></div>
+
+    <div th:if="${success}" class="alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert-error" th:text="${error}"></div>
+
+    <div class="tab-header">
+        <button class="tab-btn active" onclick="switchTab('dirTab', this)">Customer Directory</button>
+        <button class="tab-btn" onclick="switchTab('regTab', this)">New Registration</button>
+    </div>
+
+    <div id="dirTab" class="tab-content active">
+        <input type="text" id="customerSearch" class="search-box" placeholder="Search by Name or CNIC...">
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th><th>Full Name</th><th>CNIC</th><th>Phone</th><th>Email</th><th>Age</th>
+            </tr>
+            </thead>
+            <tbody id="customerTableBody">
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.id}"></td>
+                <td th:text="${customer.firstName} + ' ' + ${customer.lastName}"></td>
+                <td th:text="${customer.cnic}"></td>
+                <td th:text="${customer.phone}"></td>
+                <td th:text="${customer.email}"></td>
+                <td th:text="${customer.age}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="regTab" class="tab-content">
+        <div class="form-container">
+            <h3>Walk-In Registration</h3>
+            <form th:action="@{/customers/add}" method="post">
+                <div class="input-row">
+                    <div><label>First Name:</label><input type="text" name="firstName" required></div>
+                    <div><label>Last Name:</label><input type="text" name="lastName" required></div>
+                </div>
+                <label>CNIC (13 Digits):</label>
+                <input type="text" name="cnic" required pattern="[0-9]{13}" placeholder="36302XXXXXXXX">
+
+                <div class="input-row">
+                    <div><label>Phone:</label><input type="text" name="phone" required></div>
+                    <div><label>Email:</label><input type="email" name="email"></div>
+                </div>
+
+                <div class="input-row">
+                    <div><label>Age:</label><input type="number" name="age"></div>
+                    <div>
+                        <label>Gender:</label>
+                        <select name="gender">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label>Set Password:</label>
+                <input type="password" name="password" required>
+
+                <button type="submit" class="btn-submit">Register & Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchTab(tabId, element) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        element.classList.add('active');
+    }
+
+    // Search Filtering for Customer Table
+    document.getElementById('customerSearch').addEventListener('keyup', function() {
+        const searchValue = this.value.toLowerCase();
+        const rows = document.getElementById('customerTableBody').getElementsByTagName('tr');
+
+        for (let row of rows) {
+            const name = row.cells[1].textContent.toLowerCase();
+            const cnic = row.cells[2].textContent.toLowerCase();
+            if (name.includes(searchValue) || cnic.includes(searchValue)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        }
+    });
+</script>
+</body>
+</html>

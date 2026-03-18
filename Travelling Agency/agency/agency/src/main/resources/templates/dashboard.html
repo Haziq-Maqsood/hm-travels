@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}">Dashboard</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; height: 100vh; background-color: #ecf0f1; }
+        .sidebar { width: 250px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; }
+        .sidebar h2 { text-align: center; padding: 20px 0; margin: 0; border-bottom: 1px solid #34495e; }
+        .sidebar a { color: white; padding: 15px 20px; text-decoration: none; border-bottom: 1px solid #34495e; transition: 0.3s; }
+        .sidebar a:hover { background-color: #34495e; }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-bottom: 20px; }
+        .logout-btn { background-color: #e74c3c; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
+        .logout-btn:hover { background-color: #c0392b; }
+        .card-container { display: flex; gap: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex: 1; text-align: center; }
+        .card h3 { margin: 0 0 10px 0; color: #7f8c8d; }
+        .card p { font-size: 24px; font-weight: bold; margin: 0; color: #2c3e50; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>HM Travels</h2>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/routes">Manage Routes</a>
+    <a href="/vehicles">Manage Vehicles</a>
+    <a href="/trips">Schedule Trips</a>
+    <a href="/bookings">View Bookings</a>
+    <a href="/customers">Manage Customers</a>
+</div>
+
+<div class="main-content">
+    <div class="header">
+        <h1>Overview</h1>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+    <div class="card-container">
+        <div class="card">
+            <h3>Total Routes</h3>
+            <p th:text="${totalRoutes}">--</p>
+        </div>
+        <div class="card">
+            <h3>Active Vehicles</h3>
+            <p th:text="${totalVehicles}">--</p>
+        </div>
+        <div class="card">
+            <h3>Total Bookings</h3>
+            <p th:text="${totalBookings}">--</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

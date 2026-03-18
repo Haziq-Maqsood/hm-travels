@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}">Manage Vehicles</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; height: 100vh; background-color: #ecf0f1; }
+        .sidebar { width: 250px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; }
+        .sidebar h2 { text-align: center; padding: 20px 0; margin: 0; border-bottom: 1px solid #34495e; }
+        .sidebar a { color: white; padding: 15px 20px; text-decoration: none; border-bottom: 1px solid #34495e; transition: 0.3s; }
+        .sidebar a:hover { background-color: #34495e; }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-bottom: 20px; }
+
+        /* Table & Search Styles */
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #e67e22; color: white; }
+        .search-box { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
+
+        /* Form Styles */
+        .form-container { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 50%; margin: 0 auto; }
+        .form-container h3 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; text-align: center; }
+        .form-container input, .form-container select { width: 100%; padding: 10px; margin: 8px 0 15px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn-submit { background-color: #2ecc71; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; }
+
+        /* TABS CSS */
+        .tab-header { display: flex; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab-btn { padding: 10px 20px; cursor: pointer; background: none; border: none; font-size: 16px; font-weight: bold; color: #7f8c8d; outline: none; }
+        .tab-btn.active { color: #e67e22; border-bottom: 3px solid #e67e22; margin-bottom: -2px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>HM Travels</h2>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/routes">Manage Routes</a>
+    <a href="/vehicles">Manage Vehicles</a>
+    <a href="/trips">Schedule Trips</a>
+    <a href="/bookings">View Bookings</a>
+    <a href="/customers">Manage Customers</a>
+</div>
+
+<div class="main-content">
+    <div class="header"><h1>Fleet Management</h1></div>
+    <div th:if="${success}" class="alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert-error" th:text="${error}"></div>
+    <div class="tab-header">
+        <button class="tab-btn active" onclick="switchTab('fleetTab', this)">Fleet Directory</button>
+        <button class="tab-btn" onclick="switchTab('addTab', this)">Add New Vehicle</button>
+    </div>
+
+    <div id="fleetTab" class="tab-content active">
+        <input type="text" id="vehicleSearch" class="search-box" placeholder="Search by Model or Registration Number...">
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Vehicle Name/Model</th>
+                <th>Registration No.</th>
+                <th>Type</th>
+                <th>Seat Capacity</th>
+            </tr>
+            </thead>
+            <tbody id="vehicleTableBody">
+            <tr th:each="vehicle : ${vehicles}">
+                <td th:text="${vehicle.id}"></td>
+                <td th:text="${vehicle.vehicleName}"></td>
+                <td th:text="${vehicle.vehicleNo}"></td>
+                <td th:text="${vehicle.vehicleType}"></td>
+                <td th:text="${vehicle.capacity}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="addTab" class="tab-content">
+        <div class="form-container">
+            <h3>Register New Vehicle</h3>
+            <form th:action="@{/vehicles/add}" method="post">
+                <label>Vehicle Name/Model:</label>
+                <input type="text" name="vehicleName" required placeholder="e.g., Boeing 777 or Daewoo BH116">
+
+                <label>Registration Number:</label>
+                <input type="text" name="vehicleNo" required placeholder="e.g., LEC-4567">
+
+                <label>Vehicle Type:</label>
+                <select name="vehicleType" required>
+                    <option value="BUS">Bus</option>
+                    <option value="CAR">Car</option>
+                    <option value="AEROPLANE">Aeroplane</option>
+                </select>
+
+                <label>Total Seat Capacity:</label>
+                <input type="number" name="capacity" required placeholder="Enter total seats">
+
+                <button type="submit" class="btn-submit">Add to Fleet</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tab Switcher
+    function switchTab(tabId, element) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        element.classList.add('active');
+    }
+
+    // Live Search for Fleet
+    document.getElementById('vehicleSearch').addEventListener('keyup', function() {
+        const searchValue = this.value.toLowerCase();
+        const rows = document.getElementById('vehicleTableBody').getElementsByTagName('tr');
+
+        for (let row of rows) {
+            const model = row.cells[1].textContent.toLowerCase();
+            const regNo = row.cells[2].textContent.toLowerCase();
+            if (model.includes(searchValue) || regNo.includes(searchValue)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        }
+    });
+</script>
+</body>
+</html>

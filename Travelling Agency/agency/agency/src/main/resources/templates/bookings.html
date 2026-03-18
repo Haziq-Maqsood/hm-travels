@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}">Booking Management</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; height: 100vh; background-color: #ecf0f1; }
+        .sidebar { width: 250px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; }
+        .sidebar h2 { text-align: center; padding: 20px 0; margin: 0; border-bottom: 1px solid #34495e; }
+        .sidebar a { color: white; padding: 15px 20px; text-decoration: none; border-bottom: 1px solid #34495e; transition: 0.3s; }
+        .sidebar a:hover { background-color: #34495e; }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-bottom: 20px; }
+
+        /* Table Styles */
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 30px; font-size: 14px; }
+        th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #2c3e50; color: white; }
+        .status-badge { background-color: #2ecc71; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+
+        .btn-print-sm { background-color: #3498db; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; text-decoration: none; transition: 0.3s; margin-right: 5px; }
+        .btn-print-sm:hover { background-color: #2980b9; }
+
+        /* Form Styles */
+        .form-container { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 60%; margin: 0 auto; }
+        .form-container input:not([type="hidden"]), .form-container select { width: 100%; padding: 10px; margin: 8px 0 15px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .form-container h3 { margin-top: 0; color: #2c3e50; text-align: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
+
+        /* Button & Alert Styles */
+        .btn-submit { background-color: #2ecc71; color: white; padding: 12px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .btn-filter { background-color: #3498db; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+
+        /* NEW: Cancel Button CSS */
+        .btn-cancel { background-color: #e74c3c; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.3s; }
+        .btn-cancel:hover { background-color: #c0392b; }
+
+        .filter-box { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; display: inline-block; }
+        .alert-success { background-color: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; border-radius: 4px; }
+        .alert-error { background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 15px; border-radius: 4px; }
+
+        /* TABS CSS */
+        .tab-header { display: flex; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab-btn { padding: 10px 20px; cursor: pointer; background: none; border: none; font-size: 16px; font-weight: bold; color: #7f8c8d; outline: none; }
+        .tab-btn.active { color: #2c3e50; border-bottom: 3px solid #3498db; margin-bottom: -2px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Seat Map Styles */
+        .seat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; max-height: 250px; overflow-y: auto; padding: 5px; }
+        .seat { padding: 10px; text-align: center; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; border: 2px solid transparent; }
+        .seat-available { background-color: #ecf0f1; border-color: #bdc3c7; color: #2c3e50; }
+        .seat-available:hover { background-color: #d5dbdb; }
+        .seat-booked { background-color: #e74c3c; color: white; cursor: not-allowed; opacity: 0.7; }
+        .seat-selected { background-color: #2ecc71; color: white; border-color: #27ae60; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>HM Travels</h2>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/routes">Manage Routes</a>
+    <a href="/vehicles">Manage Vehicles</a>
+    <a href="/trips">Schedule Trips</a>
+    <a href="/bookings">View Bookings</a>
+    <a href="/customers">Manage Customers</a>
+</div>
+
+<div class="main-content">
+    <div class="header"><h1>Booking Management</h1></div>
+
+    <div th:if="${success}" class="alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert-error" th:text="${error}"></div>
+
+    <div class="tab-header">
+        <button class="tab-btn active" onclick="switchTab('viewTab', this)">View Ledger</button>
+        <button class="tab-btn" onclick="switchTab('newTab', this)">Walk-In Booking Workspace</button>
+    </div>
+
+    <div id="viewTab" class="tab-content active">
+        <div class="filter-box">
+            <form th:action="@{/bookings}" method="get">
+                <label><strong>Filter by Travel Date:</strong></label>
+                <input type="date" name="filterDate" th:value="${selectedDate}" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                <button type="submit" class="btn-filter">Filter</button>
+                <a href="/bookings?viewAll=true" style="margin-left: 10px; color: #e74c3c; text-decoration: none;">Show All History</a>
+            </form>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Ref #</th><th>Name</th><th>CNIC</th><th>Route</th><th>Travel Date</th><th>Seat</th><th>Fare</th><th>Status</th><th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(bookings)}">
+                <td colspan="9" style="text-align: center; color: #7f8c8d;">No trips scheduled or booked for this date.</td>
+            </tr>
+            <tr th:each="booking : ${bookings}">
+                <td th:text="${booking.id}"></td>
+                <td th:text="${booking.customer.firstName} + ' ' + ${booking.customer.lastName}"></td>
+                <td th:text="${booking.customer.cnic}"></td>
+                <td th:text="${booking.trip.route.routeName}"></td>
+                <td th:text="${#temporals.format(booking.trip.departureTime, 'dd-MMM-yyyy HH:mm')}"></td>
+                <td th:text="${booking.seatNo}"></td>
+                <td th:text="'Rs. ' + ${booking.totalFare}"></td>
+                <td><span class="status-badge" th:text="${booking.bookingStatus}"></span></td>
+
+                <td class="action-cell" th:data-date="${#temporals.format(booking.trip.departureTime, 'yyyy-MM-dd')}">
+                    <a th:href="@{'/bookings/ticket/' + ${booking.id}}" class="btn-print-sm">Print</a>
+
+                    <button class="btn-cancel" th:onclick="'cancelReservation(' + ${booking.id} + ')'">Cancel</button>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="newTab" class="tab-content">
+        <div class="form-container">
+            <h3>Book Walk-In Ticket</h3>
+            <form th:action="@{/bookings/add}" method="post">
+
+                <label><strong>1. Customer CNIC:</strong></label>
+                <input type="text" name="cnic" required pattern="[0-9]{13}" title="Enter exactly 13 digits" placeholder="13-digit CNIC (No dashes)">
+
+                <label><strong>2. Search Route & Date:</strong></label>
+                <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                    <input type="text" id="routeDep" placeholder="Departure City...">
+                    <input type="text" id="routeDest" placeholder="Destination City...">
+                    <input type="date" id="routeDate">
+                </div>
+
+                <label><strong>3. Select Available Trip:</strong></label>
+                <select name="tripId" id="tripDropdown" required onchange="loadSeatMap(this)">
+                    <option value="" disabled selected>-- Select a Scheduled Trip --</option>
+                    <option th:each="trip : ${trips}"
+                            th:value="${trip.id}"
+                            th:data-dep="${#strings.toLowerCase(trip.route.departureCity)}"
+                            th:data-dest="${#strings.toLowerCase(trip.route.destinationCity)}"
+                            th:data-date="${#temporals.format(trip.departureTime, 'yyyy-MM-dd')}"
+                            th:data-capacity="${trip.vehicle.capacity}"
+                            th:text="${trip.route.departureCity} + ' to ' + ${trip.route.destinationCity} + ' | ' + ${#temporals.format(trip.departureTime, 'dd-MMM HH:mm')} + ' | ' + ${trip.vehicle.vehicleType}">
+                    </option>
+                </select>
+
+                <label><strong>4. Select Seat:</strong></label>
+                <div id="seat-container" class="seat-grid">
+                    <p style="grid-column: span 4; text-align: center; color: #7f8c8d;">Please select a trip to view available seats.</p>
+                </div>
+
+                <input type="hidden" name="seatNo" id="selectedSeatInput" required>
+
+                <button type="submit" class="btn-submit" id="btn-confirm" disabled style="width: 100%; opacity: 0.6;">Select a Seat to Confirm</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Tab Switching Logic
+    function switchTab(tabId, element) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        element.classList.add('active');
+    }
+
+    // Dynamic Trip Dropdown Filtering
+    document.addEventListener('DOMContentLoaded', function() {
+        const routeDep = document.getElementById('routeDep');
+        const routeDest = document.getElementById('routeDest');
+        const routeDate = document.getElementById('routeDate');
+        const tripDropdown = document.getElementById('tripDropdown');
+        const options = tripDropdown.getElementsByTagName('option');
+
+        const today = new Date().toISOString().split('T')[0];
+        routeDate.setAttribute('min', today);
+
+        function filterTrips() {
+            const depValue = routeDep.value.toLowerCase();
+            const destValue = routeDest.value.toLowerCase();
+            const dateValue = routeDate.value;
+
+            tripDropdown.selectedIndex = 0;
+            // Clear seat map when filters change
+            document.getElementById("seat-container").innerHTML = "<p style='grid-column: span 4; text-align: center; color: #7f8c8d;'>Please select a trip to view available seats.</p>";
+            document.getElementById("btn-confirm").disabled = true;
+            document.getElementById("btn-confirm").style.opacity = "0.6";
+
+            for (let i = 1; i < options.length; i++) {
+                const optionDep = options[i].getAttribute('data-dep');
+                const optionDest = options[i].getAttribute('data-dest');
+                const optionDate = options[i].getAttribute('data-date');
+
+                const matchesDep = optionDep.includes(depValue);
+                const matchesDest = optionDest.includes(destValue);
+                const matchesDate = (dateValue === "" || optionDate === dateValue);
+
+                if (matchesDep && matchesDest && matchesDate) {
+                    options[i].style.display = "";
+                } else {
+                    options[i].style.display = "none";
+                }
+            }
+        }
+
+        routeDep.addEventListener('keyup', filterTrips);
+        routeDest.addEventListener('keyup', filterTrips);
+        routeDate.addEventListener('change', filterTrips);
+    });
+
+    // --- NEW: Interactive Seat Map Logic ---
+    async function loadSeatMap(selectElement) {
+        const tripId = selectElement.value;
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        // Read capacity from the Thymeleaf rendered data attribute
+        const capacity = parseInt(selectedOption.getAttribute('data-capacity'));
+
+        const seatContainer = document.getElementById("seat-container");
+        const btnConfirm = document.getElementById("btn-confirm");
+        const seatInput = document.getElementById("selectedSeatInput");
+
+        seatInput.value = ""; // Reset hidden input
+        btnConfirm.disabled = true;
+        btnConfirm.style.opacity = "0.6";
+        btnConfirm.innerText = "Select a Seat to Confirm";
+        seatContainer.innerHTML = "<p style='grid-column: span 4; text-align:center;'>Loading seats...</p>";
+
+        try {
+            // Fetch reservations from your REST API
+            const response = await fetch(`/api/reservations/trip/${tripId}`);
+            if (!response.ok) throw new Error("Network response was not ok");
+            const reservations = await response.json();
+
+            const bookedSeats = reservations.map(res => res.seatNo);
+            seatContainer.innerHTML = "";
+
+            for (let i = 1; i <= capacity; i++) {
+                const seatDiv = document.createElement("div");
+                seatDiv.innerText = i;
+                seatDiv.id = "seat-" + i;
+
+                if (bookedSeats.includes(i)) {
+                    seatDiv.className = "seat seat-booked";
+                    seatDiv.title = "Already Booked";
+                } else {
+                    seatDiv.className = "seat seat-available";
+                    seatDiv.onclick = function() { selectSeat(i); };
+                }
+                seatContainer.appendChild(seatDiv);
+            }
+        } catch (error) {
+            console.error("Error loading seats:", error);
+            seatContainer.innerHTML = "<p style='color:red; grid-column: span 4; text-align:center;'>Error loading seat map. Please check server connection.</p>";
+        }
+    }
+
+    function selectSeat(seatNo) {
+        // Reset previously selected seat UI
+        document.querySelectorAll('.seat-selected').forEach(el => el.className = "seat seat-available");
+
+        // Highlight new seat
+        const clickedSeat = document.getElementById("seat-" + seatNo);
+        clickedSeat.className = "seat seat-selected";
+
+        // Update hidden input for standard form POST submission
+        document.getElementById("selectedSeatInput").value = seatNo;
+
+        // Enable Submit Button
+        const btnConfirm = document.getElementById("btn-confirm");
+        btnConfirm.disabled = false;
+        btnConfirm.style.opacity = "1";
+        btnConfirm.innerText = `Confirm Booking for Seat #${seatNo}`;
+    }
+
+    // --- NEW: Cancel Reservation Logic ---
+    function cancelReservation(reservationId) {
+        if (!confirm("Are you sure you want to cancel this ticket? This cannot be undone.")) {
+            return;
+        }
+
+        fetch(`/api/reservations/cancel/${reservationId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Ticket successfully cancelled!");
+                    window.location.reload(); // Reloads the page to update the table
+                } else {
+                    alert("Error: Could not cancel the ticket.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Network error. Make sure your Spring Boot server is running.");
+            });
+    }
+    // --- NEW: Date Checker for Past Trips ---
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get strict today format (e.g., "2024-03-17")
+        const today = new Date().toISOString().split('T')[0];
+
+        // Find every action cell in the table
+        document.querySelectorAll('.action-cell').forEach(cell => {
+            const tripDate = cell.getAttribute('data-date');
+
+            // If the trip date is older than today, remove the button!
+            if (tripDate < today) {
+                cell.innerHTML = '<span style="color: #7f8c8d; font-size: 12px; font-weight: bold;">Past Trip</span>';
+            }
+        });
+    });
+</script>
+</body>
+</html>
